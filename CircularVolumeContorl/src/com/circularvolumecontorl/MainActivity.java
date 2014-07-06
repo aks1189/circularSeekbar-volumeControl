@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.TextView;
 
 import com.circularvolumecontrol.utilities.CircularSeekBar;
 import com.circularvolumecontrol.utilities.CircularSeekBar.OnCircularSeekBarChangeListener;
@@ -19,6 +20,7 @@ public class MainActivity extends Activity {
 	private int maxVolume;
 	private int progressDegree;
 	private int currentProgress;
+	private TextView tvCurrentVolume;
 	// Media Player
 	private MediaPlayer mpPlaySound;
 
@@ -32,6 +34,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		circularSeekBar = (CircularSeekBar) findViewById(R.id.circularSeekBar1);
+		tvCurrentVolume = (TextView) findViewById(R.id.tv_volume_level);
 		audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
 		maxVolume = audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
@@ -44,6 +47,7 @@ public class MainActivity extends Activity {
 		currentProgress = circularSeekBar.getProgress();
 		circularSeekBar.setMax(360);
 		circularSeekBar.setProgress(progressDegree * currentVolume);
+		tvCurrentVolume.setText("" + currentVolume);
 		mpPlaySound = MediaPlayer.create(this, sadPiano);
 		mpPlaySound.setLooping(true);
 		mpPlaySound.start();
@@ -88,7 +92,7 @@ public class MainActivity extends Activity {
 							// Log.d("Progress", "" + round(progress));
 							audio.setStreamVolume(AudioManager.STREAM_MUSIC,
 									setVolume, 0);
-
+							tvCurrentVolume.setText("" + setVolume);
 							Log.d("CURRENT VOL", "" + currentVolume);
 							Log.d("SET VOL", "" + setVolume);
 						}
@@ -109,6 +113,7 @@ public class MainActivity extends Activity {
 				circularSeekBar.setEnabled(false);
 			}
 			circularSeekBar.setProgress(currentVolume * progressDegree);
+			tvCurrentVolume.setText("" + currentVolume);
 			Log.d("CURRENT VOL", "" + currentVolume);
 			hardKeyPressed = true;
 			return true;
@@ -120,6 +125,8 @@ public class MainActivity extends Activity {
 			if (currentVolume * progressDegree == 0) {
 				circularSeekBar.setEnabled(false);
 			}
+			tvCurrentVolume.setText("" + currentVolume);
+
 			circularSeekBar.setProgress(currentVolume * progressDegree);
 
 			// Log.d("VOLUME DOWN", "KEY PRESSED DOWN");
